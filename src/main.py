@@ -30,5 +30,5 @@ def detect_on_video():
 
 
 if __name__ == '__main__':
-    # detect_on_images()
-    detect_on_video()
+    detect_on_images()
+    # detect_on_video()
