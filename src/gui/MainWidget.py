@@ -1,3 +1,4 @@
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QListWidget, QStackedWidget
 
 from gui.HeaderWidget import HeaderWidget
@@ -10,6 +11,7 @@ class MainWidget(QWidget):
         super(MainWidget, self).__init__(parent=parent)
         self.setWindowTitle("Smart Driving Assistant")
         self.setMinimumSize(640, 360)
+        self.setWindowIcon(QIcon('./assets/logo.jpg'))
         # header
         self.header = HeaderWidget()
         self.header.currentRowChanged.connect(self.display)
