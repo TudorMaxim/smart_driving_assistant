@@ -9,4 +9,4 @@ class HeaderWidget(QListWidget):
         self.insertItem(1, 'Videos')
         self.setCurrentRow(0)
         self.setFlow(QListWidget.LeftToRight)
-        self.setStyleSheet(open('styles/HeaderWidget.css').read())
+        self.setStyleSheet(open('../../styles/HeaderWidget.css').read())

@@ -6,11 +6,11 @@ from moviepy.video.io.VideoFileClip import VideoFileClip
 
 from controller.ObjectDetectionController import ObjectDetectionController
 
-IMAGES_IN_PATH = 'assets/images/*'
-IMAGES_OUT_PATH = 'output/images/'
-IN_VIDEO_PATH = 'assets/videos/project_video.mp4'
-OUT_VIDEO_PATH = 'output/videos/project_video_od.mp4'
-object_detection_controller = ObjectDetectionController()
+IMAGES_IN_PATH = '../input/images/*'
+IMAGES_OUT_PATH = '../output/images/'
+IN_VIDEO_PATH = '../input/videos/project_video.mp4'
+OUT_VIDEO_PATH = '../output/videos/project_video_od.mp4'
+object_detection_controller = ObjectDetectionController(root_path='../')
 
 
 def detect_on_images():
@@ -25,7 +25,9 @@ def detect_on_images():
         print("Inference Time: ", inference_time)
         result = object_detection_controller.draw_bounding_boxes(image, detections)
         filename = path.split("\\")[-1]
-        cv2.imwrite(IMAGES_OUT_PATH + filename, result)
+        # cv2.imwrite(IMAGES_OUT_PATH + filename, result)
+        cv2.imshow(filename, result)
+    cv2.waitKey(0)
 
 
 def process_video(image):
@@ -40,5 +42,5 @@ def detect_on_video():
 
 
 if __name__ == '__main__':
-    # detect_on_images()
-    detect_on_video()
+    detect_on_images()
+    # detect_on_video()

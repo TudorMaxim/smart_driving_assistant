@@ -1,5 +1,5 @@
 .idea
-src/output
+output
 *.weights
 *.pickle
-src/assets/videos
+input/videos

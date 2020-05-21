@@ -6,7 +6,7 @@ from model.Line import Line
 
 
 class LaneDetectionController:
-    def __init__(self, root_path='./', plot=True, direction_error=15):
+    def __init__(self, root_path='../', plot=True, direction_error=15):
         self.calibration_file = root_path + 'config/calibration.pickle'
         self.ret, self.mtx, self.dist, self.rvecs, self.tvecs = self.__calibrate()
         self.left_line = Line()

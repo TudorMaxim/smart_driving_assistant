@@ -9,7 +9,7 @@ class ConfigForm(QDialog):
         main_layout = QVBoxLayout()
         main_layout.addWidget(self.form_group_box)
         self.setLayout(main_layout)
-        self.setStyleSheet(open('./styles/ConfigForm.css').read())
+        self.setStyleSheet(open('../../styles/ConfigForm.css').read())
 
     def create_form_group_box(self):
         self.form_group_box = QGroupBox("Choose your configuration")

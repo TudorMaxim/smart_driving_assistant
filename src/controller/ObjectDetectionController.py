@@ -8,8 +8,8 @@ from utils.DetectionUtils import DetectionUtils
 
 
 class ObjectDetectionController:
-    def __init__(self, root_path="./", confidence_threshold=0.8, nms_threshold=0.4, image_size=416):
-        self.image_folder = root_path + 'assets/images/'
+    def __init__(self, root_path="../", confidence_threshold=0.8, nms_threshold=0.4, image_size=416):
+        self.image_folder = root_path + 'input/images/'
         self.model_cfg = root_path + 'config/yolov3.cfg'
         self.weights_path = root_path + 'config/yolov3.weights'
         self.class_path = root_path + 'config/coco.names'

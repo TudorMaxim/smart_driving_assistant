@@ -5,12 +5,14 @@ from moviepy.video.io.VideoFileClip import VideoFileClip
 
 from controller.DrivingAssistantController import DrivingAssistantController
 
-IMAGES_IN_PATH = 'assets/images/test*'
-IMAGES_OUT_PATH = 'output/images/'
-VIDEOS_IN_PATH = 'assets/videos/project_video.mp4'
-VIDEOS_OUT_PATH = 'output/videos/project_video_result.mp4'
+IMAGES_IN_PATH = '../input/images/test*'
+IMAGES_OUT_PATH = '../output/images/'
+VIDEOS_IN_PATH = '../input/videos/project_video.mp4'
+VIDEOS_OUT_PATH = '../output/videos/project_video_result.mp4'
 
-controller = DrivingAssistantController()
+controller = DrivingAssistantController(
+    root_path='../'
+)
 
 
 def detect_on_images():

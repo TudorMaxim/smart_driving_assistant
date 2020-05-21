@@ -130,7 +130,7 @@ class DetectionUtils:
 
     @staticmethod
     def calibrate_camera():
-        paths = glob.glob('assets/calibration/*')
+        paths = glob.glob('input/calibration/*')
         chess_images = [cv2.imread(path) for path in paths]
         objpoints = []
         imgpoints = []
@@ -151,7 +151,7 @@ class DetectionUtils:
         ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
         if not ret:
             raise Exception("calibration unsuccessfull")
-        file = open('../config/calibration.pickle', 'wb')
+        file = open('../../config/calibration.pickle', 'wb')
         pickle.dump([ret, mtx, dist, rvecs, tvecs], file)
         return ret, mtx, dist, rvecs, tvecs
 
