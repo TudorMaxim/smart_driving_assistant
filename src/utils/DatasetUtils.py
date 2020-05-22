@@ -1,9 +1,10 @@
 import glob
 import cv2
+from utils.Constants import Constants
 
 
 class DatasetUtils:
-    def __init__(self, detections_path='../../config/detections.txt'):
+    def __init__(self, detections_path=Constants.DETECTIONS_PATH):
         self.detections_path = detections_path
 
     def save_detections(self, in_paths, out_paths):
@@ -13,9 +14,13 @@ class DatasetUtils:
             file.write(line)
 
     def get_images_from_directory(self, directory_path):
+        if directory_path[-1] != '/':
+            directory_path += '/'
+        print('Loading images from directory: ' + directory_path)
         paths = glob.glob(directory_path + "*.jpg") + glob.glob(directory_path + "*.png")
-        paths = [path.replace('\\', '/').rstrip('\n') for path in paths]
         images = [cv2.imread(path) for path in paths]
+        print('Loaded ' + str(len(images)) + " images.")
+        paths = [path.replace('\\', '/').rstrip('\n') for path in paths]
         return paths, images
 
     def load_detections(self):

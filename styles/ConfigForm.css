@@ -1,8 +1,6 @@
-QPushButton {
-    max-width: 70px;
-}
 
 ConfigForm {
-    max-width: 360px;
+    min-width: 450px;
+    max-width: 450px;
     /*font: 8pt Arial, Helvetica, sans-serif;*/
 }

@@ -37,18 +37,18 @@ class ConfigForm(QDialog):
 
         self.path = ''
         self.selected_path = QLabel()
+        self.error_message = QLabel()
+        self.error_message.setStyleSheet("QLabel {color: red;}")
         browse_button = QPushButton('Browse')
         browse_button.clicked.connect(self.browse)
-        sub_layout = QHBoxLayout()
+        sub_layout = QVBoxLayout()
         sub_layout.addWidget(browse_button)
         sub_layout.addWidget(self.selected_path)
+        sub_layout.addWidget(self.error_message)
         sub_layout.setContentsMargins(0, 0, 0, 0)
         select_widget = QWidget()
         select_widget.setLayout(sub_layout)
-
-        button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
-        button_box.accepted.connect(self.run_detector)
-        button_box.rejected.connect(self.reset_fields)
+        self.button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
 
         layout = QFormLayout()
         layout.addRow(QLabel('Image Size:'), self.image_size_input)
@@ -56,15 +56,12 @@ class ConfigForm(QDialog):
         layout.addRow(QLabel("IoU Threshold (%):"), self.od_iou_thresh_input)
         layout.addRow(QLabel("Direction Error (%):"), self.ld_direction_error_input)
         layout.addRow(QLabel('Select a folder:'), select_widget)
-        layout.addWidget(button_box)
+        layout.addWidget(self.button_box)
+
         self.form_group_box.setLayout(layout)
 
     def browse(self):
         self.path = QFileDialog.getExistingDirectory(None, 'Select a folder:', 'C:\\', QFileDialog.ShowDirsOnly)
+        if self.path != '' and self.error_message.text() != '':
+            self.error_message.setText('')
         self.selected_path.setText(self.path)
-
-    def run_detector(self):
-        print("TODO: run the detector on a different thread")
-
-    def reset_fields(self):
-        print("TODO: reset all input fields")

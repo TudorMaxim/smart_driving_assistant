@@ -6,3 +6,4 @@ class Constants:
     VIDEOS_OUT_PATH = '../results/videos/project_video_result.mp4'
     DETECTIONS_PATH = '../config/detections.txt'
     LOGO_PATH = '../assets/logo.jpg'
+    ROOT_PATH = '../'
