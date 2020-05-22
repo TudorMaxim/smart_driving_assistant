@@ -1,5 +1,5 @@
-from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import QListWidget
+from utils.Constants import Constants
 
 
 class HeaderWidget(QListWidget):
@@ -9,4 +9,4 @@ class HeaderWidget(QListWidget):
         self.insertItem(1, 'Videos')
         self.setCurrentRow(0)
         self.setFlow(QListWidget.LeftToRight)
-        self.setStyleSheet(open('../../styles/HeaderWidget.css').read())
+        self.setStyleSheet(open(Constants.STYLES_PATH + 'HeaderWidget.css').read())

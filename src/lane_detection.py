@@ -4,7 +4,7 @@ from moviepy.video.io.VideoFileClip import VideoFileClip
 from controller.LaneDetectionController import LaneDetectionController
 
 IN_VIDEO_PATH = '../input/videos/project_video.mp4'
-OUT_VIDEO_PATH = '../output/videos/project_video_ld.mp4'
+OUT_VIDEO_PATH = '../results/videos/project_video_ld.mp4'
 IN_IMAGES_PATH = '../input/images/test*.jpg'
 
 

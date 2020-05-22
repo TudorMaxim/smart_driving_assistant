@@ -7,9 +7,9 @@ from moviepy.video.io.VideoFileClip import VideoFileClip
 from controller.ObjectDetectionController import ObjectDetectionController
 
 IMAGES_IN_PATH = '../input/images/*'
-IMAGES_OUT_PATH = '../output/images/'
+IMAGES_OUT_PATH = '../results/images/'
 IN_VIDEO_PATH = '../input/videos/project_video.mp4'
-OUT_VIDEO_PATH = '../output/videos/project_video_od.mp4'
+OUT_VIDEO_PATH = '../results/videos/project_video_od.mp4'
 object_detection_controller = ObjectDetectionController(root_path='../')
 
 

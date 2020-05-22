@@ -1,3 +1,14 @@
-QVBoxLayout {
-    background: blue;
+QGroupBox {
+    border: 1px solid white;
+    margin-top: 27px;
+    font-size: 14px;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    padding: 5px 25px;
+    background-color: #29b6f6;
+    color: white;
+    font-weight: bold;
 }

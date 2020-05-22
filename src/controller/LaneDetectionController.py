@@ -6,7 +6,7 @@ from model.Line import Line
 
 
 class LaneDetectionController:
-    def __init__(self, root_path='../', plot=True, direction_error=15):
+    def __init__(self, root_path='../', plot=False, direction_error=15):
         self.calibration_file = root_path + 'config/calibration.pickle'
         self.ret, self.mtx, self.dist, self.rvecs, self.tvecs = self.__calibrate()
         self.left_line = Line()
@@ -65,50 +65,53 @@ class LaneDetectionController:
         img = Image(image, 'rgb')
         undist = img.undistort(self.mtx, self.dist)
         n_lines = 15
-        # convert to binary top down view of the lane lines and apply sobel
-        binary, inv_matrix = undist.binary_warp(plot=self.plot)
-        if self.right_line.detected and self.left_line.detected:
-            left_fit, right_fit, leftx, rightx, lefty, righty = binary.find_lines_based_on_previous(
-                self.left_line.best_fit,
-                self.right_line.best_fit
-            )
-        else:
-            left_fit, right_fit, leftx, rightx, lefty, righty = binary.find_lines()
+        try:
+            # convert to binary top down view of the lane lines and apply sobel
+            binary, inv_matrix = undist.binary_warp(plot=self.plot)
+            if self.right_line.detected and self.left_line.detected:
+                left_fit, right_fit, leftx, rightx, lefty, righty = binary.find_lines_based_on_previous(
+                    self.left_line.best_fit,
+                    self.right_line.best_fit
+                )
+            else:
+                left_fit, right_fit, leftx, rightx, lefty, righty = binary.find_lines()
 
-        self.right_line.update_fit(right_fit, rightx, righty, n_lines)
-        self.left_line.update_fit(left_fit, leftx, lefty, n_lines)
+            self.right_line.update_fit(right_fit, rightx, righty, n_lines)
+            self.left_line.update_fit(left_fit, leftx, lefty, n_lines)
 
-        if self.right_line.detected and self.left_line.detected:
-            warped = binary
-            warp_zero = np.zeros_like(warped).astype(np.uint8)
-            color_warp = np.dstack((warp_zero, warp_zero, warp_zero))
-            left_fit = self.left_line.best_fit
-            right_fit = self.right_line.best_fit
-            curvature, position = self.__get_radius(left_fit, right_fit)
-            direction = self.__get_direction(self.left_line.best_fit, self.right_line.best_fit)
+            if self.right_line.detected and self.left_line.detected:
+                warped = binary
+                warp_zero = np.zeros_like(warped).astype(np.uint8)
+                color_warp = np.dstack((warp_zero, warp_zero, warp_zero))
+                left_fit = self.left_line.best_fit
+                right_fit = self.right_line.best_fit
+                curvature, position = self.__get_radius(left_fit, right_fit)
+                direction = self.__get_direction(self.left_line.best_fit, self.right_line.best_fit)
 
-            ploty = np.linspace(0, 719, num=720)
-            left_fitx = left_fit[0] * ploty ** 2 + left_fit[1] * ploty + left_fit[2]
-            right_fitx = right_fit[0] * ploty ** 2 + right_fit[1] * ploty + right_fit[2]
-            # recast the x and y points into usable format for cv2.fillPoly()
-            pts_left = np.array([np.transpose(np.vstack([left_fitx, ploty]))])
-            pts_right = np.array([np.flipud(np.transpose(np.vstack([right_fitx, ploty])))])
-            pts = np.hstack((pts_left, pts_right))
-            # draw the lane onto the warped blank image
-            cv2.fillPoly(color_warp, np.int_([pts]), (0, 255, 0))
-            # warp the blank back to original image space using inverse perspective matrix (inv_matrix)
-            newwarp = cv2.warpPerspective(color_warp, inv_matrix, (img.img.shape[1], img.img.shape[0]))
-            # combine the result with the original image
-            result = cv2.addWeighted(undist.img, 1, newwarp, 0.3, 0)
+                ploty = np.linspace(0, 719, num=720)
+                left_fitx = left_fit[0] * ploty ** 2 + left_fit[1] * ploty + left_fit[2]
+                right_fitx = right_fit[0] * ploty ** 2 + right_fit[1] * ploty + right_fit[2]
+                # recast the x and y points into usable format for cv2.fillPoly()
+                pts_left = np.array([np.transpose(np.vstack([left_fitx, ploty]))])
+                pts_right = np.array([np.flipud(np.transpose(np.vstack([right_fitx, ploty])))])
+                pts = np.hstack((pts_left, pts_right))
+                # draw the lane onto the warped blank image
+                cv2.fillPoly(color_warp, np.int_([pts]), (0, 255, 0))
+                # warp the blank back to original image space using inverse perspective matrix (inv_matrix)
+                newwarp = cv2.warpPerspective(color_warp, inv_matrix, (img.img.shape[1], img.img.shape[0]))
+                # combine the result with the original image
+                result = cv2.addWeighted(undist.img, 1, newwarp, 0.3, 0)
 
-            cv2.putText(result, "Average curvature: %.1f m." % curvature, (50, 70), cv2.FONT_HERSHEY_DUPLEX, 1,
-                        (255, 255, 255), 2)
-            cv2.putText(result, "Direction: %s." % direction, (50, 120), cv2.FONT_HERSHEY_DUPLEX, 1,
-                        (255, 255, 255), 2)
-            cv2.putText(result, "Off the center: %.1f m." % position, (50, 170), cv2.FONT_HERSHEY_DUPLEX, 1,
-                        (255, 255, 255), 2)
-            return result
-        else:
+                cv2.putText(result, "Average curvature: %.1f m." % curvature, (50, 70), cv2.FONT_HERSHEY_DUPLEX, 1,
+                            (255, 255, 255), 2)
+                cv2.putText(result, "Direction: %s." % direction, (50, 120), cv2.FONT_HERSHEY_DUPLEX, 1,
+                            (255, 255, 255), 2)
+                cv2.putText(result, "Off the center: %.1f m." % position, (50, 170), cv2.FONT_HERSHEY_DUPLEX, 1,
+                            (255, 255, 255), 2)
+                return result
+            else:
+                return undist.img
+        except:
             return undist.img
 
     def process_image(self, image):

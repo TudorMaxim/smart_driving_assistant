@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QVBoxLayout, QFormLayout, QLabel, QComboBox, QSpinBox, \
     QGroupBox, QFileDialog, QPushButton, QWidget, QHBoxLayout
+from utils.Constants import Constants
 
 
 class ConfigForm(QDialog):
@@ -9,11 +10,10 @@ class ConfigForm(QDialog):
         main_layout = QVBoxLayout()
         main_layout.addWidget(self.form_group_box)
         self.setLayout(main_layout)
-        self.setStyleSheet(open('../../styles/ConfigForm.css').read())
+        self.setStyleSheet(open(Constants.STYLES_PATH + 'ConfigForm.css').read())
 
     def create_form_group_box(self):
-        self.form_group_box = QGroupBox("Choose your configuration")
-
+        self.form_group_box = QGroupBox("Run the detector")
         self.image_size_input = QComboBox()
         self.image_size_input.addItem('256x256')
         self.image_size_input.addItem('416x416')

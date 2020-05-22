@@ -1,0 +1,8 @@
+../input/images/test1.jpg,../results/images/test1.jpg
+../input/images/test2.jpg,../results/images/test2.jpg
+../input/images/test3.jpg,../results/images/test3.jpg
+../input/images/test4.jpg,../results/images/test4.jpg
+../input/images/test5.jpg,../results/images/test5.jpg
+../input/images/test6.jpg,../results/images/test6.jpg
+../input/images/test7.jpg,../results/images/test7.jpg
+../input/images/test8.jpg,../results/images/test8.jpg

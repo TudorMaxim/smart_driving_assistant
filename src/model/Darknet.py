@@ -81,7 +81,7 @@ class Darknet(nn.Module):
                 # Define detection layer
                 yolo_layer = YOLOLayer(anchors, num_classes, img_size)
                 modules.add_module(f"yolo_{module_i}", yolo_layer)
-            # Register module list and number of output filters
+            # Register module list and number of results filters
             module_list.append(modules)
             output_filters.append(filters)
 
