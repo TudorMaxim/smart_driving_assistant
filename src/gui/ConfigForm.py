@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QVBoxLayout, QFormLayout, QLabel, QComboBox, QSpinBox, \
-    QGroupBox, QFileDialog, QPushButton, QWidget, QHBoxLayout
+    QGroupBox, QFileDialog, QPushButton, QWidget
 from utils.Constants import Constants
 
 
@@ -9,6 +9,7 @@ class ConfigForm(QDialog):
         self.create_form_group_box()
         main_layout = QVBoxLayout()
         main_layout.addWidget(self.form_group_box)
+        main_layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(main_layout)
         self.setStyleSheet(open(Constants.STYLES_PATH + 'ConfigForm.css').read())
 

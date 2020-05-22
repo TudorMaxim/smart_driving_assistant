@@ -1,0 +1,8 @@
+QGroupBox {
+    background: white;
+}
+
+QScrollArea {
+    border: 0;
+    background-color: white;
+}
