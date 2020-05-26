@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QVBoxLayout, QFormLayout, QLabel, QComboBox, QSpinBox, \
-    QGroupBox, QFileDialog, QPushButton, QWidget
+    QGroupBox, QFileDialog, QPushButton, QWidget, QRadioButton
 from utils.Constants import Constants
 
 
@@ -36,6 +36,9 @@ class ConfigForm(QDialog):
         self.ld_direction_error_input.setMaximum(50)
         self.ld_direction_error_input.setValue(15)
 
+        self.od_use_tiny_yolo = QRadioButton()
+        self.od_use_tiny_yolo.setChecked(False)
+
         self.path = ''
         self.selected_path = QLabel()
         self.error_message = QLabel()
@@ -56,6 +59,7 @@ class ConfigForm(QDialog):
         layout.addRow(QLabel("Confidence Threshold (%):"), self.od_confidence_thresh_input)
         layout.addRow(QLabel("IoU Threshold (%):"), self.od_iou_thresh_input)
         layout.addRow(QLabel("Direction Error (%):"), self.ld_direction_error_input)
+        layout.addRow(QLabel('Use Tiny YoloV3:'), self.od_use_tiny_yolo)
         layout.addRow(QLabel('Select a folder:'), select_widget)
         layout.addWidget(self.button_box)
 
@@ -65,4 +69,20 @@ class ConfigForm(QDialog):
         self.path = QFileDialog.getExistingDirectory(None, 'Select a folder:', 'C:\\', QFileDialog.ShowDirsOnly)
         if self.path != '' and self.error_message.text() != '':
             self.error_message.setText('')
+        self.selected_path.setText(self.truncate_path())
+
+    def clear_form(self):
+        self.path = ''
         self.selected_path.setText(self.path)
+        self.error_message.setText('')
+        self.ld_direction_error_input.setValue(15)
+        self.od_iou_thresh_input.setValue(40)
+        self.od_confidence_thresh_input.setValue(50)
+        self.image_size_input.setCurrentIndex(1)
+        self.od_use_tiny_yolo.setChecked(False)
+
+    def truncate_path(self):
+        truncated = self.path.split("/")
+        if len(truncated) > 2:
+            return truncated[0] + '/.../' + truncated[-1]
+        return self.path

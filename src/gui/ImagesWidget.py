@@ -17,7 +17,7 @@ class ImagesWidget(QWidget):
         self.dataset_utils = DatasetUtils(detections_path=Constants.DETECTIONS_PATH)
         self.config_form = ConfigForm(parent=parent)
         self.config_form.button_box.accepted.connect(self.run_detector)
-        self.config_form.button_box.rejected.connect(self.reset_fields)
+        self.config_form.button_box.rejected.connect(self.config_form.clear_form)
 
         self.images_grid = QGroupBox("Results")
         self.images_box_layout = QVBoxLayout()
@@ -42,12 +42,15 @@ class ImagesWidget(QWidget):
         self.images_scroll_area_layout.setContentsMargins(0, 0, 0, 0)
         _, out_paths = self.dataset_utils.load_detections()
 
+        min_width = 600
+        max_width = 1280
+        width = min(max_width, max(min_width, self.images_box_layout.geometry().width() - 48))
+
         for out_path in out_paths:
             result = QLabel('Result Image')
             result.setAlignment(Qt.AlignCenter)
-            # result.setScaledContents(True)
             pixmap = QPixmap(out_path)
-            result.setPixmap(pixmap.scaledToWidth(600))
+            result.setPixmap(pixmap.scaledToWidth(width))
             self.images_scroll_area_layout.addWidget(result)
             self.result_images.append((result, pixmap))
 
@@ -81,13 +84,15 @@ class ImagesWidget(QWidget):
         iou_thresh = int(self.config_form.od_iou_thresh_input.text()) / 100
         direction_error = int(self.config_form.ld_direction_error_input.text())
         image_size = img_sizes[self.config_form.image_size_input.currentIndex()]
+        use_tiny_yolo = self.config_form.od_use_tiny_yolo.isChecked()
 
         worker = ImagesWorker(
             confidence_thresh=confidence_thresh,
             nms_thresh=iou_thresh,
             image_size=image_size,
             direction_error=direction_error,
-            images_path=self.config_form.path
+            images_path=self.config_form.path,
+            tiny=use_tiny_yolo
         )
         worker.signals.finished.connect(self.create_images_grid)
         worker.signals.error.connect(self.show_error)
@@ -99,15 +104,6 @@ class ImagesWidget(QWidget):
     def show_error(self):
         error_dialog = QErrorMessage()
         error_dialog.showMessage('An error occured while processing the images!')
-
-    def reset_fields(self):
-        self.config_form.path = ''
-        self.config_form.selected_path.setText(self.config_form.path)
-        self.config_form.error_message.setText('')
-        self.config_form.ld_direction_error_input.setValue(15)
-        self.config_form.od_iou_thresh_input.setValue(40)
-        self.config_form.od_confidence_thresh_input.setValue(50)
-        self.config_form.image_size_input.setCurrentIndex(1)
 
     def resizeEvent(self, event):
         min_width = 600

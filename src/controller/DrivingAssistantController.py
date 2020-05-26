@@ -1,6 +1,5 @@
 import cv2
 from moviepy.video.io.VideoFileClip import VideoFileClip
-
 from controller.LaneDetectionController import LaneDetectionController
 from controller.ObjectDetectionController import ObjectDetectionController
 from model.Line import Line
@@ -9,7 +8,7 @@ from utils.DatasetUtils import DatasetUtils
 
 
 class DrivingAssistantController:
-    def __init__(self, root_path='./', confidence_threshold=0.8, nms_threshold=0.4, image_size=416, direction_error=15):
+    def __init__(self, root_path='./', confidence_threshold=0.8, nms_threshold=0.4, image_size=416, direction_error=15, tiny=False):
         self.lane_detection_controller = LaneDetectionController(
             root_path=root_path,
             direction_error=direction_error
@@ -18,7 +17,8 @@ class DrivingAssistantController:
             root_path=root_path,
             confidence_threshold=confidence_threshold,
             nms_threshold=nms_threshold,
-            image_size=image_size
+            image_size=image_size,
+            tiny=tiny
         )
 
     def detect(self, image):
