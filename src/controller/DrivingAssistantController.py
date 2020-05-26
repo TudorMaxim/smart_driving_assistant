@@ -46,6 +46,11 @@ class DrivingAssistantController:
         dataset_utils.save_detections(paths, out_paths)
 
     def detect_on_video(self, video_in_path=Constants.VIDEOS_IN_PATH):
+        dataset_utils = DatasetUtils(detections_path=Constants.VIDEO_DETECTIONS_PATH)
         video = VideoFileClip(video_in_path)
         output_video = video.fl_image(self.detect)
-        output_video.write_videofile(Constants.VIDEOS_OUT_PATH, audio=False)
+        extension = video_in_path.split(".")[-1]
+        filename = video_in_path.split('.')[0] + "_result." + extension
+        video_out_path = Constants.VIDEO_DETECTIONS_PATH + filename
+        output_video.write_videofile(video_out_path, audio=False)
+        dataset_utils.save_detections(in_paths=[video_in_path], out_paths=[video_out_path])

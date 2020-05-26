@@ -11,6 +11,7 @@ class MainWidget(QWidget):
         super(MainWidget, self).__init__(parent=parent)
         self.setWindowTitle("Smart Driving Assistant")
         self.setMinimumWidth(1024)
+        self.setMinimumHeight(550)
         self.setWindowIcon(QIcon(Constants.LOGO_PATH))
         # header
         self.header = HeaderWidget()

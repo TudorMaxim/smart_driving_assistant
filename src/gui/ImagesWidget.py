@@ -1,6 +1,6 @@
 from PyQt5.QtCore import QThreadPool, Qt
 from PyQt5.QtGui import QPixmap, QMovie
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QGroupBox, QLabel, QScrollArea, QHBoxLayout
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QGroupBox, QLabel, QScrollArea, QHBoxLayout, QErrorMessage
 from gui.ConfigForm import ConfigForm
 from gui.ImagesWorker import ImagesWorker
 from utils.Constants import Constants
@@ -11,6 +11,7 @@ class ImagesWidget(QWidget):
     def __init__(self, parent=None):
         super(ImagesWidget, self).__init__(parent=parent)
         self.is_running = False
+        self.result_images = []
         self.threadpool = QThreadPool()
 
         self.dataset_utils = DatasetUtils(detections_path=Constants.DETECTIONS_PATH)
@@ -37,19 +38,21 @@ class ImagesWidget(QWidget):
         images_scroll_area = QScrollArea()
         # images_scroll_area.horizontalScrollBar().setEnabled(False)
         images_scroll_area.setWidgetResizable(True)
-        images_scroll_area_layout = QVBoxLayout()
-        images_scroll_area_layout.setContentsMargins(0, 0, 0, 0)
+        self.images_scroll_area_layout = QVBoxLayout()
+        self.images_scroll_area_layout.setContentsMargins(0, 0, 0, 0)
         _, out_paths = self.dataset_utils.load_detections()
 
         for out_path in out_paths:
             result = QLabel('Result Image')
             result.setAlignment(Qt.AlignCenter)
             # result.setScaledContents(True)
-            result.setPixmap(QPixmap(out_path))
-            images_scroll_area_layout.addWidget(result)
+            pixmap = QPixmap(out_path)
+            result.setPixmap(pixmap.scaledToWidth(600))
+            self.images_scroll_area_layout.addWidget(result)
+            self.result_images.append((result, pixmap))
 
         images_widget = QWidget()
-        images_widget.setLayout(images_scroll_area_layout)
+        images_widget.setLayout(self.images_scroll_area_layout)
         images_scroll_area.setWidget(images_widget)
         self.images_box_layout.addWidget(images_scroll_area)
 
@@ -65,12 +68,13 @@ class ImagesWidget(QWidget):
     def clear_images_box_layout(self):
         for i in reversed(range(self.images_box_layout.count())):
             self.images_box_layout.itemAt(i).widget().deleteLater()
+        self.result_images.clear()
 
     def run_detector(self):
         if self.is_running:
             return
         if self.config_form.path == '':
-            self.config_form.error_message.setText('Please select an images folder')
+            self.config_form.error_message.setText('Please select the images.')
             return
         img_sizes = [256, 416, 720]
         confidence_thresh = int(self.config_form.od_confidence_thresh_input.text()) / 100
@@ -93,7 +97,8 @@ class ImagesWidget(QWidget):
         self.threadpool.start(worker)
 
     def show_error(self):
-        print("An error has occured")
+        error_dialog = QErrorMessage()
+        error_dialog.showMessage('An error occured while processing the images!')
 
     def reset_fields(self):
         self.config_form.path = ''
@@ -104,3 +109,10 @@ class ImagesWidget(QWidget):
         self.config_form.od_confidence_thresh_input.setValue(50)
         self.config_form.image_size_input.setCurrentIndex(1)
 
+    def resizeEvent(self, event):
+        min_width = 600
+        max_width = 1280
+        width = min(max_width, max(min_width, self.images_box_layout.geometry().width() - 48))
+        for label, pixmap in self.result_images:
+            label.setPixmap(pixmap.scaledToWidth(width))
+        super(ImagesWidget, self).resizeEvent(event)
