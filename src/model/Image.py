@@ -11,6 +11,7 @@ class Image:
         self.img = img
         self.form = form
         self.shape = 0
+        self.img = cv2.resize(self.img, (1280, 720), interpolation=cv2.INTER_AREA)
 
     def imshow(self, title=None):
         img = self.img

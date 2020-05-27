@@ -2,7 +2,7 @@ from PyQt5.QtCore import QThreadPool, Qt
 from PyQt5.QtGui import QPixmap, QMovie
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QGroupBox, QLabel, QScrollArea, QHBoxLayout, QErrorMessage
 from gui.ConfigForm import ConfigForm
-from gui.ImagesWorker import ImagesWorker
+from workers.ImagesWorker import ImagesWorker
 from utils.Constants import Constants
 from utils.DatasetUtils import DatasetUtils
 

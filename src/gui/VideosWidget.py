@@ -4,7 +4,7 @@ from PyQt5.QtMultimediaWidgets import QVideoWidget
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QGroupBox, QHBoxLayout, QErrorMessage, QPushButton, QStyle, QSlider
 from gui.ConfigForm import ConfigForm
-from gui.VideosWorker import VideosWorker
+from workers.VideosWorker import VideosWorker
 from utils.Constants import Constants
 from utils.DatasetUtils import DatasetUtils
 
@@ -30,7 +30,6 @@ class VideosWidget(QWidget):
         self.layout.addWidget(self.config_form)
         self.layout.addWidget(self.video_grid)
         self.setLayout(self.layout)
-        # self.setStyleSheet(open(Constants.STYLES_PATH + 'ImagesWidget.css').read())
 
     def create_video_grid(self):
         self.is_running = False
@@ -66,8 +65,6 @@ class VideosWidget(QWidget):
         self.wrapper_layout.addLayout(control_layout)
         self.video_player_wrapper.setLayout(self.wrapper_layout)
         self.video_box_layout.addWidget(self.video_player_wrapper)
-        # self.video_box_layout.addWidget(self.video_player_widget)
-        # self.video_box_layout.addLayout(control_layout)
 
         self.media_player.setVideoOutput(self.video_player_widget)
         self.media_player.stateChanged.connect(self.media_state_changed)

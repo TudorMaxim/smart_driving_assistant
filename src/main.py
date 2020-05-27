@@ -6,4 +6,4 @@ if __name__ == '__main__':
         root_path='../'
     )
     # controller.detect_on_images()
-    # controller.detect_on_video()
+    controller.detect_on_video()
