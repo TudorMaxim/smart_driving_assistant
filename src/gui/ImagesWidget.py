@@ -16,6 +16,7 @@ class ImagesWidget(QWidget):
 
         self.dataset_utils = DatasetUtils(detections_path=Constants.DETECTIONS_PATH)
         self.config_form = ConfigForm(parent=parent)
+        self.config_form.browse_button.clicked.connect(self.config_form.browse)
         self.config_form.button_box.accepted.connect(self.run_detector)
         self.config_form.button_box.rejected.connect(self.config_form.clear_form)
 
@@ -36,7 +37,6 @@ class ImagesWidget(QWidget):
 
         self.is_running = False
         images_scroll_area = QScrollArea()
-        # images_scroll_area.horizontalScrollBar().setEnabled(False)
         images_scroll_area.setWidgetResizable(True)
         self.images_scroll_area_layout = QVBoxLayout()
         self.images_scroll_area_layout.setContentsMargins(0, 0, 0, 0)

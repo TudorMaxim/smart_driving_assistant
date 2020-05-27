@@ -1,0 +1,1 @@
+E:/Documents/Facultate/Licenta/smart_driving_assistant/input/videos/project_video.mp4,../results/videos/project_video_result.mp4

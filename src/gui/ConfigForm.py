@@ -43,10 +43,9 @@ class ConfigForm(QDialog):
         self.selected_path = QLabel()
         self.error_message = QLabel()
         self.error_message.setStyleSheet("QLabel {color: red;}")
-        browse_button = QPushButton('Browse')
-        browse_button.clicked.connect(self.browse)
+        self.browse_button = QPushButton('Browse')
         sub_layout = QVBoxLayout()
-        sub_layout.addWidget(browse_button)
+        sub_layout.addWidget(self.browse_button)
         sub_layout.addWidget(self.selected_path)
         sub_layout.addWidget(self.error_message)
         sub_layout.setContentsMargins(0, 0, 0, 0)
@@ -67,6 +66,12 @@ class ConfigForm(QDialog):
 
     def browse(self):
         self.path = QFileDialog.getExistingDirectory(None, 'Select a folder:', 'C:\\', QFileDialog.ShowDirsOnly)
+        if self.path != '' and self.error_message.text() != '':
+            self.error_message.setText('')
+        self.selected_path.setText(self.truncate_path())
+
+    def browse_video(self):
+        self.path, _ = QFileDialog.getOpenFileName(self, "Select a video", 'C:\\', "*.mp4")
         if self.path != '' and self.error_message.text() != '':
             self.error_message.setText('')
         self.selected_path.setText(self.truncate_path())
