@@ -10,7 +10,7 @@ IMAGES_IN_PATH = '../input/images/*'
 IMAGES_OUT_PATH = '../results/images/'
 IN_VIDEO_PATH = '../input/videos/project_video.mp4'
 OUT_VIDEO_PATH = '../results/videos/project_video_od.mp4'
-object_detection_controller = ObjectDetectionController(root_path='../')
+object_detection_controller = ObjectDetectionController()
 
 
 def detect_on_images():

@@ -11,7 +11,7 @@ IN_IMAGES_PATH = '../input/images/test*.jpg'
 def detect_on_images():
     paths = glob.glob(IN_IMAGES_PATH)
     images = [cv2.imread(path) for path in paths]
-    lane_detection_controller = LaneDetectionController(root_path='../', plot=True)
+    lane_detection_controller = LaneDetectionController(plot=True)
     for image, path in zip(images, paths):
         print("Image " + path)
         result = lane_detection_controller.process_image(image)
@@ -23,7 +23,7 @@ def detect_on_images():
 
 
 def detect_on_video():
-    lane_detection_controller = LaneDetectionController(root_path='../')
+    lane_detection_controller = LaneDetectionController()
     video = VideoFileClip(IN_VIDEO_PATH)
     output_video = video.fl_image(lane_detection_controller.process_video)
     output_video.write_videofile(OUT_VIDEO_PATH, audio=False)

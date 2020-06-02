@@ -3,19 +3,20 @@ import torch
 from random import randint
 from torch.autograd import Variable
 from model.Darknet import Darknet
+from utils.Constants import Constants
 from utils.ImageUtils import ImageUtils
 from utils.DetectionUtils import DetectionUtils
 
 
 class ObjectDetectionController:
-    def __init__(self, root_path="../", confidence_threshold=0.8, nms_threshold=0.4, image_size=416, tiny=False):
-        self.image_folder = root_path + 'input/images/'
-        self.model_cfg = root_path + 'config/yolov3.cfg'
-        self.weights_path = root_path + 'config/yolov3.weights'
+    def __init__(self, confidence_threshold=0.8, nms_threshold=0.4, image_size=416, tiny=False):
+        self.image_folder = Constants.ROOT_PATH + 'input/images/'
+        self.model_cfg = Constants.ROOT_PATH + 'config/yolov3.cfg'
+        self.weights_path = Constants.ROOT_PATH + 'config/yolov3.weights'
         if tiny:
-            self.model_cfg = root_path + 'config/yolov3-tiny.cfg'
-            self.weights_path = root_path + 'config/yolov3-tiny.weights'
-        self.class_path = root_path + 'config/coco.names'
+            self.model_cfg = Constants.ROOT_PATH + 'config/yolov3-tiny.cfg'
+            self.weights_path = Constants.ROOT_PATH + 'config/yolov3-tiny.weights'
+        self.class_path = Constants.ROOT_PATH + 'config/coco.names'
         self.confidence_threshold = confidence_threshold
         self.nms_threshold = nms_threshold
         self.image_size = image_size

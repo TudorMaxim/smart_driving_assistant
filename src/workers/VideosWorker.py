@@ -18,7 +18,6 @@ class VideosWorker(QRunnable):
     def run(self) -> None:
         try:
             driving_assistant_controller = DrivingAssistantController(
-                root_path=Constants.ROOT_PATH,
                 confidence_threshold=self.confidence_thresh,
                 nms_threshold=self.nsm_thresh,
                 direction_error=self.direction_error,

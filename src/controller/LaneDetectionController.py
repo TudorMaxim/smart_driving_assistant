@@ -3,11 +3,12 @@ import cv2
 import numpy as np
 from model.Image import Image
 from model.Line import Line
+from utils.Constants import Constants
 
 
 class LaneDetectionController:
-    def __init__(self, root_path='../', plot=False, direction_error=15):
-        self.calibration_file = root_path + 'config/calibration.pickle'
+    def __init__(self,  plot=False, direction_error=15):
+        self.calibration_file = Constants.ROOT_PATH + 'config/calibration.pickle'
         self.ret, self.mtx, self.dist, self.rvecs, self.tvecs = self.__calibrate()
         self.left_line = Line()
         self.right_line = Line()
