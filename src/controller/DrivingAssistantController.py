@@ -26,7 +26,7 @@ class DrivingAssistantController:
         result = self.lane_detection_controller.detect(image)
         return self.object_detection_controller.draw_bounding_boxes(result, detections)
 
-    def reset_lanes(self):
+    def __reset_lanes(self):
         self.lane_detection_controller.left_line = Line()
         self.lane_detection_controller.right_line = Line()
 
@@ -36,7 +36,7 @@ class DrivingAssistantController:
         out_paths = []
         print("Loaded images.")
         for image, path in zip(images, paths):
-            self.reset_lanes()
+            self.__reset_lanes()
             result = self.detect(image)
             filename = path.split("/")[-1]
             out_paths.append(Constants.IMAGES_OUT_PATH + filename)

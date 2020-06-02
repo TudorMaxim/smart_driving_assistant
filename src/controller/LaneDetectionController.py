@@ -120,5 +120,5 @@ class LaneDetectionController:
         self.right_line = Line()
         return self.detect(image)
 
-    def process_video(self, image):
-        return self.detect(image)
+    def process_video(self, frame):
+        return self.detect(frame)

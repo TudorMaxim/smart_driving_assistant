@@ -1,7 +1,6 @@
 from PyQt5.QtCore import QRunnable
 from controller.DrivingAssistantController import DrivingAssistantController
-from gui.WorkerSignals import WorkerSignals
-from utils.Constants import Constants
+from workers.WorkerSignals import WorkerSignals
 
 
 class ImagesWorker(QRunnable):

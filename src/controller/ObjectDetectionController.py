@@ -10,7 +10,6 @@ from utils.DetectionUtils import DetectionUtils
 
 class ObjectDetectionController:
     def __init__(self, confidence_threshold=0.8, nms_threshold=0.4, image_size=416, tiny=False):
-        self.image_folder = Constants.ROOT_PATH + 'input/images/'
         self.model_cfg = Constants.ROOT_PATH + 'config/yolov3.cfg'
         self.weights_path = Constants.ROOT_PATH + 'config/yolov3.weights'
         if tiny:
