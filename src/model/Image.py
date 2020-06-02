@@ -79,7 +79,7 @@ class Image:
         return Image(img, form=form)
 
     # run sobel operation on either x or y axis.
-    def sobel_thresh(self, orient='x', ksize=5, thresh=(50, 255)):
+    def sobel_threshold(self, orient='x', ksize=5, thresh=(50, 255)):
         img = self.img
         if len(img.shape) > 2:
             img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
@@ -119,7 +119,7 @@ class Image:
 
     # returns binary image of sobel magnitude between mag_thresh values
     # ksize sets size of sobel kernals
-    def mag_thresh(self, ksize=5, mag_thresh=(50, 255)):
+    def mag_threshold(self, ksize=5, mag_threshold=(50, 255)):
         img = self.img
         # if not grey image, convert to grey
         if len(img.shape) > 2:
@@ -134,47 +134,47 @@ class Image:
         sobel_scaled = (sobel_mag / scale_factor).astype(np.uint8)
         # Apply threshold
         grad_binary = np.zeros_like(sobel_scaled)
-        grad_binary[(sobel_scaled >= mag_thresh[0]) & (sobel_scaled <= mag_thresh[1])] = 1
+        grad_binary[(sobel_scaled >= mag_threshold[0]) & (sobel_scaled <= mag_threshold[1])] = 1
         img = grad_binary
         return Image(img, form='gray')
 
     # produce a picture from all places where both binary pictures have 1's
-    def image_and(self, img2):
+    def image_and(self, other):
         if self.img is None:
             raise Exception("class doesn't contain an image")
         img1 = self.img
 
         # if being passed an image class, grab the image to use.
-        if type(self) == type(img2):
-            img2 = img2.img
+        if type(self) == type(other):
+            other = other.img
         # check that the images are valid for the -and- function
-        if img1.shape != img2.shape:
+        if img1.shape != other.shape:
             raise Exception("shapes must be equal to preform and operation")
-        if (np.max(img1) > 1) | (np.max(img2) > 1):
+        if (np.max(img1) > 1) | (np.max(other) > 1):
             raise Exception("and operation doesn't work on non-binary images")
 
         # create image where all shared white pixels are set to 1
         output = np.zeros_like(img1)
-        output[(img1 == 1) & (img2 == 1)] = 1
+        output[(img1 == 1) & (other == 1)] = 1
         img = output
         return Image(img=img, form='gray')
 
     # produce a picture from all places where either binary picture has a value of 1
-    def image_or(self, img2):
+    def image_or(self, other):
         if self.img is None:
             raise Exception("class doesn't contain an image")
         img1 = self.img
         # if being passed an image class, grab the image to use.
-        if type(self) == type(img2):
-            img2 = img2.img
+        if type(self) == type(other):
+            other = other.img
         # check that the images are valid for the -and- function
-        if img1.shape != img2.shape:
+        if img1.shape != other.shape:
             raise Exception("shapes must be equal to preform or operation")
-        if (np.max(img1) > 1) | (np.max(img2) > 1):
+        if (np.max(img1) > 1) | (np.max(other) > 1):
             raise Exception("or operation doesn't work on non-binary images")
         # create image where all white pixels from either image are set to 1
         output = np.zeros_like(img1)
-        output[(img1 == 1) | (img2 == 1)] = 1
+        output[(img1 == 1) | (other == 1)] = 1
         img = output
         return Image(img=img, form='gray')
 
@@ -238,13 +238,13 @@ class Image:
         # calculate directional threshhold
         dir_thresh = blur.dir_threshold(ksize=9, thresh=(.7, 1.3))
         # calculate magnitude threshhold
-        mag_thresh = blur.mag_thresh(ksize=5, mag_thresh=(50, 255))
+        mag_threshold = blur.mag_threshold(ksize=5, mag_threshold=(50, 255))
         # combine both images with and operation
-        magdir = mag_thresh.image_and(dir_thresh)
+        magdir = mag_threshold.image_and(dir_thresh)
         # preform sobel operation on several image channels and axis
-        lx = l.sobel_thresh(orient='x', ksize=5, thresh=(40, 100))
-        sx = s.sobel_thresh(orient='x', ksize=5, thresh=(25, 255))
-        sy = s.sobel_thresh(orient='y', ksize=5, thresh=(30, 100))
+        lx = l.sobel_threshold(orient='x', ksize=5, thresh=(40, 100))
+        sx = s.sobel_threshold(orient='x', ksize=5, thresh=(25, 255))
+        sy = s.sobel_threshold(orient='y', ksize=5, thresh=(30, 100))
         # combine all images to get the clearest binary img of the lines
         sxy = sx.image_and(sy)
         lsxy = sxy.image_or(lx)
