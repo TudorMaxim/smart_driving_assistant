@@ -45,16 +45,31 @@ class ImagesWidget(QWidget):
         min_width = 600
         max_width = 1280
         width = min(max_width, max(min_width, self.images_box_layout.geometry().width() - 48))
-
-        for out_path in out_paths:
-            result = QLabel('Result Image')
-            result.setAlignment(Qt.AlignCenter)
-            pixmap = QPixmap(out_path)
-            result.setPixmap(pixmap.scaledToWidth(width))
-            self.images_scroll_area_layout.addWidget(result)
-            self.result_images.append((result, pixmap))
+        if len(out_paths) == 0:
+            welcome = QLabel("Welcome to the Smart Driving Assistant!")
+            welcome.setAlignment(Qt.AlignCenter)
+            welcome.setStyleSheet("font: 18pt Arial, Helvetica, sans-serif; color: #29b6f6; font-weight: bold;")
+            help = QLabel("For processing images, please select a directory\n using the configuration menu from the left.")
+            help.setAlignment(Qt.AlignCenter)
+            help.setStyleSheet("font: 12pt Arial, Helvetica, sans-serif; color: #29b6f6; font-weight: bold;")
+            layout = QVBoxLayout()
+            layout.addWidget(welcome)
+            layout.addWidget(help)
+            messages = QWidget()
+            messages.setFixedHeight(125)
+            messages.setLayout(layout)
+            self.images_scroll_area_layout.addWidget(messages)
+        else:
+            for out_path in out_paths:
+                result = QLabel('Result Image')
+                result.setAlignment(Qt.AlignCenter)
+                pixmap = QPixmap(out_path)
+                result.setPixmap(pixmap.scaledToWidth(width))
+                self.images_scroll_area_layout.addWidget(result)
+                self.result_images.append((result, pixmap))
 
         images_widget = QWidget()
+        images_widget.setStyleSheet("background: white;")
         images_widget.setLayout(self.images_scroll_area_layout)
         images_scroll_area.setWidget(images_widget)
         self.images_box_layout.addWidget(images_scroll_area)
