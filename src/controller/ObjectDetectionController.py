@@ -23,7 +23,7 @@ class ObjectDetectionController:
         self.font = cv2.FONT_HERSHEY_PLAIN
         self.classes = DetectionUtils.load_classes(self.class_path)
         # self.colors = [(randint(0, 255), randint(0, 255), randint(0, 255)) for _ in range(len(self.classes))]
-        self.colors = [(0, 205 , 0) for _ in range(len(self.classes))]
+        self.colors = [(0, 175, 0) for _ in range(len(self.classes))]
         self.model = self.__load_model()
 
     def __load_model(self):

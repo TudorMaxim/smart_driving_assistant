@@ -47,6 +47,8 @@ class LaneDetectionController:
         r_base_pos = 720 * polyfit_right[0] ** 2 + 720 * polyfit_right[1] + polyfit_right[2]
         lane_center = (r_base_pos + l_base_pos) / 2
         offset = (middle - lane_center) * xm_per_pix
+        if abs(offset) < 0.1:
+            offset = 0
         return avg_curvature, offset
 
     def __get_direction(self, left_fit, right_fit):
@@ -105,10 +107,17 @@ class LaneDetectionController:
 
                 cv2.putText(result, "Average curvature: %.1f m." % curvature, (50, 70), cv2.FONT_HERSHEY_DUPLEX, 1,
                             (255, 255, 255), 2)
-                cv2.putText(result, "Direction: %s." % direction, (50, 120), cv2.FONT_HERSHEY_DUPLEX, 1,
+                cv2.putText(result, "Lane direction: %s." % direction, (50, 120), cv2.FONT_HERSHEY_DUPLEX, 1,
                             (255, 255, 255), 2)
-                cv2.putText(result, "Off the center: %.1f m." % position, (50, 170), cv2.FONT_HERSHEY_DUPLEX, 1,
-                            (255, 255, 255), 2)
+
+                position = round(position, 1)
+                if position == 0:
+                    cv2.putText(result, "Off the center: %.1f m." % position, (50, 170), cv2.FONT_HERSHEY_DUPLEX, 1,
+                                (255, 255, 255), 2)
+                else:
+                    offset_dir = 'to the left.' if position < 0 else 'to the right.'
+                    cv2.putText(result, "Off the center: " + str(abs(position)) + "m " + offset_dir, (50, 170),
+                                cv2.FONT_HERSHEY_DUPLEX, 1, (255, 255, 255), 2)
                 return result
             else:
                 return undist.img
